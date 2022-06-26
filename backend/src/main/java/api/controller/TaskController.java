@@ -9,6 +9,7 @@ import utils.ServletUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,31 +51,35 @@ public class TaskController extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		TaskService taskService = new TaskService();
  		String contentType = request.getContentType();
-		String prettyResponse = null;
-		response.setContentType(contentType);
+ 		response.setContentType(contentType);
+ 		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+ 		response.setHeader("Access-Control-Allow-Methods", "GET");
+ 		JsonObject jsonRepsonse = null;
 		PrintWriter writer = response.getWriter();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String url = ServletUtils.returnRouteFromADisplayName(request.getRequestURI());
 		
+		
 		if(url.equals("servlet-api/servlet/api/task")) {
-			long id = TaskUtils.getIdFromJsonObject(request);
+			String idText = request.getParameter("id");
+			long id = Long.parseLong(idText);
 			TaskResponse serverResponse = taskService.getById(id);
 			
-			prettyResponse = gson.toJson(ServletUtils.convertTaskResponseToJson(serverResponse));
-			
+			jsonRepsonse = ServletUtils.convertTaskResponseToJson(serverResponse);
+			writer.println(jsonRepsonse);
 		}
 		
 		if(url.equals("servlet-api/servlet/api/tasks-by-status")) {
+			List<JsonObject> jsonResponseList = null;
 			JsonObject requestBody = ServletUtils.getBodyAsJson(request);
 			JsonElement taskDescriptionAsJson = requestBody.get("status");
 			
 			boolean status = taskDescriptionAsJson.getAsBoolean();
 			TaskResponse serverResponse = taskService.findAllTasksByStatus(status);
 
-			prettyResponse = gson.toJson(ServletUtils.convertTaskResponseToAListOfJson(serverResponse));
+			jsonResponseList = ServletUtils.convertTaskResponseToAListOfJson(serverResponse);
+			writer.println(jsonResponseList);
 		}
 		
-		writer.print(prettyResponse);
 		
 	}
 	
@@ -146,11 +151,13 @@ public class TaskController extends HttpServlet {
 		TaskService taskService = new TaskService();
  		String contentType = request.getContentType();
 		String prettyResponse = null;
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		response.setContentType(contentType);
 		PrintWriter writer = response.getWriter();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
-		long id = TaskUtils.getIdFromJsonObject(request);
+		String idText = request.getParameter("id");
+		long id = Long.parseLong(idText);
+		
 		TaskResponse serverResponse = taskService.delete(id);
 		prettyResponse = gson.toJson(serverResponse);
 		
