@@ -33,6 +33,7 @@
   </filter-mapping>
   <servlet-mapping>
     <servlet-name>TaskController</servlet-name>
+     <url-pattern>/test</url-pattern>
     <url-pattern>/servlet/api/new-task</url-pattern>
     <url-pattern>/servlet/api/task</url-pattern>
     <url-pattern>/servlet/api/tasks-by-status</url-pattern>

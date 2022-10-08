@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import api.model.Task;
+import api.repository.TaskRepository;
 import api.response.TaskResponse;
 import api.taskUtils.TaskUtils;
 import db.Database;
 
-public class TaskService{
+public class TaskService implements TaskRepository {
 
 	private boolean isPreparedStatementError;
 	private boolean isCloseResultSetError;

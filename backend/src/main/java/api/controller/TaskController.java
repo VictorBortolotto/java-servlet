@@ -1,6 +1,7 @@
 package api.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,9 +19,10 @@ import api.response.TaskResponse;
 import api.service.TaskService;
 import api.taskUtils.TaskUtils;
 
+@WebServlet("/servlet-api/")
 public class TaskController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String method = request.getMethod();
@@ -43,6 +45,7 @@ public class TaskController extends HttpServlet {
 		TaskService taskService = new TaskService();
 		PrintWriter writer = response.getWriter();
 		response.setContentType(request.getContentType());
+		String prettyResponse = "";
 		
 		ServletUtils.initialServletGetConfiguration(response, request);
 		
@@ -50,6 +53,10 @@ public class TaskController extends HttpServlet {
 		TaskJsonResponse taskJsonResponse  = new TaskJsonResponse();
 		
 		String url = ServletUtils.returnRouteFromADisplayName(request.getRequestURI());
+		
+		if(url.equals("servlet-api/test")) {
+			prettyResponse = "<html><body><h2>Task Controller It's Working!</h2></body></html>"; 
+		}
 		
 		if(url.equals("servlet-api/servlet/api/task")) {
 			String idText = request.getParameter("id");
@@ -63,9 +70,11 @@ public class TaskController extends HttpServlet {
 			serverResponse = taskService.findAllTasksByStatus(status);
 		}
 		
-		taskJsonResponse = TaskUtils.convertApiResponseToJson(serverResponse);
-		
-		String prettyResponse = ServletUtils.gsonBuilder().toJson(taskJsonResponse);
+		if (serverResponse != null) {
+			taskJsonResponse = TaskUtils.convertApiResponseToJson(serverResponse);
+			
+			prettyResponse = ServletUtils.gsonBuilder().toJson(taskJsonResponse);
+		}
 		
 		writer.print(prettyResponse);
 	}

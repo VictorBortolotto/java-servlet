@@ -1,19 +1,16 @@
 package api.repository;
 
-import java.util.List;
-
 import api.model.Task;
+import api.response.TaskResponse;
 
 public interface TaskRepository {
 
-	void save(Task task);
+	TaskResponse save(Task task);
 	
-	Task getById(long id);
+	TaskResponse getById(long id);
 	
-	List<Task> findAllPenddingTasks(boolean status);
+	TaskResponse findAllTasksByStatus(boolean status);
 	
-	List<Task> findAllFinishedTasks(boolean status);
-	
-	void delete(long id);
+	TaskResponse delete(long id);
 	
 }
