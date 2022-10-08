@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+  <display-name>servlet-api</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>TaskController</display-name>
+    <servlet-name>TaskController</servlet-name>
+    <servlet-class>api.controller.TaskController</servlet-class>
+  </servlet>
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowed.origins</param-name>
+      <param-value>http://localhost:3000</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet-mapping>
+    <servlet-name>TaskController</servlet-name>
+    <url-pattern>/servlet/api/new-task</url-pattern>
+    <url-pattern>/servlet/api/task</url-pattern>
+    <url-pattern>/servlet/api/tasks-by-status</url-pattern>
+    <url-pattern>/servlet/api/update-to-done</url-pattern>
+    <url-pattern>/servlet/api/update-to-pending</url-pattern>
+    <url-pattern>/servlet/api/update-task-name</url-pattern>
+    <url-pattern>/servlet/api/update-task-description</url-pattern>
+    <url-pattern>/servlet/api/delete-task</url-pattern>
+  </servlet-mapping>
+</web-app>
