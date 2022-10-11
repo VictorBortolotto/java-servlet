@@ -1,0 +1,34 @@
+.navbar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(48, 106, 212);
+    height: 100vh;
+}
+
+.navbar .list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0px;
+    padding-inline-start: 0px;
+    
+}
+
+.navbar .list .list-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: white;
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    height: 45px;
+}
+.icon {
+    color: white;
+}
+
+.list .list-item:hover {
+    display: flex;
+    background-color: rgb(64, 177, 230);
+}

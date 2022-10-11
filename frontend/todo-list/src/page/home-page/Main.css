@@ -6,29 +6,6 @@
 
 .content {
     display: flex;
+    margin: 10px;
     width: 100%;
-    flex-direction: column;
-}
-
-.header{
-    display: flex;
-    justify-content: flex-start;
-    height: 70px;
-    padding: 5px;
-}
-
-.cards {
-    height: 100%;
-}
-
-.footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-    margin-right: 30px;
-}
-
-#list {
-    display: flex;
-    padding: 5px;
 }
