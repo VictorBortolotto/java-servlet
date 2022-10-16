@@ -70,6 +70,10 @@ public class TaskController extends HttpServlet {
 			serverResponse = taskService.findAllTasksByStatus(status);
 		}
 		
+		if(url.equals("servlet-api/servlet/api/tasks")) {
+			serverResponse = taskService.findAllTasks();
+		}
+		
 		if (serverResponse != null) {
 			taskJsonResponse = TaskUtils.convertApiResponseToJson(serverResponse);
 			

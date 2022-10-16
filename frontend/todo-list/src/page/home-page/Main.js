@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainPanel } from '../../commons/panel/MainPanel';
+import { MainPanel } from '../../commons/panel/main-panel/MainPanel';
 
 import { SideBarMenu } from '../../commons/side-bar/SideBarMenu';
 import './Main.css'

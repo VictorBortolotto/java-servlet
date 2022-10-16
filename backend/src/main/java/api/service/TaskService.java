@@ -83,6 +83,45 @@ public class TaskService implements TaskRepository {
 		return new TaskResponse(200, "Task retrived with success!", task);
 	}
 
+	public TaskResponse findAllTasks() {
+		List<Task> taskList = new ArrayList<Task>();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			connection = Database.getConnection();
+			preparedStatement = connection.prepareStatement("select id, name, description, status from tasks");
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				Task task= new Task();
+				task.setId(resultSet.getLong("id"));
+				task.setName(resultSet.getString("name"));
+				task.setDescription(resultSet.getString("description"));
+				task.setStatus(resultSet.getBoolean("status"));
+				
+				taskList.add(task);
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			isPreparedStatementError = true;
+		}finally {
+			isCloseConnectionError = Database.closeConnection(connection);
+			isClosePreparedStatementError = Database.closePreparedStatement(preparedStatement);
+			isCloseResultSetError = Database.closeResultSet(resultSet);
+			
+			if(isPreparedStatementError || isCloseConnectionError || isClosePreparedStatementError || isCloseResultSetError) {
+				return new TaskResponse(500, "Database error");
+			}
+			
+			if (taskList == null || taskList.size() == 0) {
+				return new TaskResponse(404, "There's no tasks to retrive!");
+			}
+		}
+		
+		return new TaskResponse(200, "Tasks retrived with success!", taskList);
+	}
+	
 	public TaskResponse findAllTasksByStatus(boolean status) {
 		List<Task> taskList = new ArrayList<Task>();
 		Connection connection = null;

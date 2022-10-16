@@ -8,6 +8,55 @@ const httpMethods = {
     delete: 'DELETE'
 }
 
+export function save(task) {
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.post,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default',
+        body: JSON.stringify(task)
+    };
+
+    return fetch(DEFAULT_URL + `/servlet/api/new-task`, request).then(response => response.json())
+}
+
+export function getAllTasks(){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.get,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/tasks`, request).then(response => response.json())
+
+}   
+
+export function getByStatus(status){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.get,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/tasks-by-status?status=${status}`, request).then(response => response.json())
+
+}   
 
 const getByID = (id) => {
     
@@ -32,79 +81,3 @@ const getByID = (id) => {
         return data;
     });
 };
-
-const getByDescription = (description) => {
-    
-    return fetch(DEFAULT_URL, {
-        method: httpMethods.get,
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            description   
-        }),
-    }).then(async (response) => {
-        const data = await response.json();
-        return data;
-    });
-};
-
-const getByName = (name) => {
-    
-    return fetch(DEFAULT_URL, {
-        method: httpMethods.get,
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name   
-        }),
-    }).then(async (response) => {
-        const data = await response.json();
-        return data;
-    });
-};
-
-const getByPendding = (status) => {
-    
-    return fetch(DEFAULT_URL, {
-        method: httpMethods.get,
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            status   
-        }),
-    }).then(async (response) => {
-        const data = await response.json();
-        return data;
-    });
-};
-
-const getByDone = (status) => {
-    
-    return fetch(DEFAULT_URL, {
-        method: httpMethods.get,
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            status   
-        }),
-    }).then(async (response) => {
-        const data = await response.json();
-        return data;
-    });
-};
-
-export default {
-    getByID,
-    getByPendding,
-    getByDone,
-    getByDescription,
-    getByPendding
-}
