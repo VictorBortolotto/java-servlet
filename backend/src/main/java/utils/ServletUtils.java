@@ -38,7 +38,7 @@ public class ServletUtils {
 	
 	public static void initialServletGetConfiguration(HttpServletResponse response, HttpServletRequest request) {
  		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
- 		response.setHeader("Access-Control-Allow-Methods", "GET");
+ 		response.setHeader("Access-Control-Allow-Methods", "GET,PATCH");
 	}
 	
 	public static JsonObject getBodyAsJson(HttpServletRequest request) {

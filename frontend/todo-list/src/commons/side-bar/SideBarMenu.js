@@ -19,7 +19,7 @@ const SideBarMenu = () => {
                 <img src={require('../assets/to_do_4.png')} alt='logo' height={150} width={150}></img>
             </div>
             <List className='list'>
-                <ListItem className='list-item' button={true} component={Link} {...{to: ""}}>
+                <ListItem className='list-item' button={true} component={Link} {...{to: "/home"}}>
                     <ListItemIcon sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -27,15 +27,15 @@ const SideBarMenu = () => {
                     }}><Icon><HomeIcon className='icon'></HomeIcon></Icon></ListItemIcon>
                     HOME
                 </ListItem>
-                <ListItem className='list-item' button={true} component={Link} {...{to: ""}}>
+                <ListItem className='list-item' button={true} component={Link} {...{to: "/pending"}}>
                     <ListItemIcon sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}><Icon><PendingActionsIcon className='icon'></PendingActionsIcon></Icon></ListItemIcon>
-                    PENDDING
+                    PENDING
                 </ListItem>
-                <ListItem className='list-item' button={true} component={Link} {...{to: ""}} >
+                <ListItem className='list-item' button={true} component={Link} {...{to: "/done"}} >
                     <ListItemIcon sx={{
                         display: 'flex',
                         alignItems: 'center',

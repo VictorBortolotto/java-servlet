@@ -92,11 +92,13 @@ public class TaskController extends HttpServlet {
 		JsonObject requestBody = ServletUtils.getBodyAsJson(request);
 		JsonElement taskDescriptionAsJson = requestBody.get("description");
 		JsonElement taskNameAsJson = requestBody.get("name");
+		JsonElement taskStatusAsJson = requestBody.get("status");
 		
 		String taskDescription = taskDescriptionAsJson.getAsString();
 		String taskName = taskNameAsJson.getAsString();
+		boolean taskStatus = Boolean.parseBoolean(taskStatusAsJson.getAsString());
 		
-		Task task = new Task(taskName, taskDescription, false);
+		Task task = new Task(taskName, taskDescription, taskStatus);
 		TaskResponse serverResponse = taskService.save(task);
 		
 		TaskJsonResponse taskJsonResponse = TaskUtils.convertApiResponseToJson(serverResponse);
@@ -110,6 +112,7 @@ public class TaskController extends HttpServlet {
 		String url = ServletUtils.returnRouteFromADisplayName(request.getRequestURI());
 		response.setContentType(request.getContentType());
 		response.setCharacterEncoding("UTF-8");
+		ServletUtils.initialServletGetConfiguration(response, request);
 		
 		TaskResponse serverResponse = null;
 		
@@ -147,6 +150,12 @@ public class TaskController extends HttpServlet {
 		String prettyResponse = ServletUtils.gsonBuilder().toJson(taskJsonResponse);
 		
 		return prettyResponse;
+	}
+	
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPut(req, resp);
 	}
 
 	@Override

@@ -58,26 +58,72 @@ export function getByStatus(status){
 
 }   
 
-const getByID = (id) => {
-    
+export function updateTaskName(id, task){
+
     const headers = new Headers({
         "Content-Type": "application/json"
-    });
+    })
+
     const request = {
-        method: 'GET',
+        method: httpMethods.patch,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default',
+        body: JSON.stringify(task)
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/update-task-name?id=${id}`, request).then(response => response.json())
+
+}
+
+export function updateTaskDescription(id, task){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.patch,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default',
+        body: JSON.stringify(task)
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/update-task-description?id=${id}`, request).then(response => response.json())
+
+}
+
+export function updateToDone(id){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.patch,
         headers: headers,
         mode: 'cors',
         cache: 'default'
     };
-    return fetch(DEFAULT_URL + `servlet/api/task?id=${id}`, request).then(response => { 
-        let data = null;
-        response.text().then(res => {
-            data = res;
-            data = data.replace("null", "");
-            data = JSON.parse(data);
-        }).catch(e => {
-            console.log("ERRO: " + e);
-        })
-        return data;
-    });
-};
+
+    return fetch(DEFAULT_URL + `servlet/api/update-to-done?id=${id}`, request).then(response => response.json())
+
+}
+
+export function updateToPending(id){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.patch,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/update-to-done?id=${id}`, request).then(response => response.json())
+
+}

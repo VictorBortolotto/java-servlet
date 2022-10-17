@@ -12,17 +12,20 @@ import TablePagination from '@mui/material/TablePagination';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-import {getAllTasks} from '../../services/TaskService.js'
+import {getByStatus} from '../../services/TaskService.js'
+import { EditTaskDialog } from "../dialog/EditTaskDialog.js";
 
-const InformationTaskCard = () => {
+const EditableTasksCard = ({taskStatus}) => {
 
     const [taskList, setTaskList] = useState([]) 
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [ openEditDialog, setOpenEditDialog ] = useState(false)
+    const [ openSnackBar, setOpenSnackBar ] = useState(false);
     const [ message, setMessage] = useState('')
     const [ messageType,  setMessageType] = useState('')
+    const [ task, setTask ] = useState({})
 
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -45,9 +48,18 @@ const InformationTaskCard = () => {
         setOpenSnackBar(false);
     };
 
-    async function findAllTask(){
+    function handleClickChangeTask(task) {
+        setOpenEditDialog(true)
+        setTask(task)
+    }
 
-        const response = await getAllTasks();
+    const handleOnCloseDialog = () => {
+        setOpenEditDialog(false)
+    }
+
+    async function findTasksByStatus(taskStatus){
+
+        const response = await getByStatus(taskStatus);
         if(response.jsonObject.status_code == 500){
             setOpenSnackBar(true)
             setMessage(response.jsonObject.message)
@@ -67,8 +79,9 @@ const InformationTaskCard = () => {
     }
 
     useEffect(() => {
-        findAllTask();
+        findTasksByStatus(taskStatus);
     }, []);
+
 
     return <>
         <Snackbar open={openSnackBar} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={3000} onClose={handleClose}>
@@ -92,10 +105,10 @@ const InformationTaskCard = () => {
                             <TableCell sx={{textAlign: 'center', fontSize: '18px' }}>STATUS</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody >
                         {taskList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(task => {
                             return <>
-                                <TableRow hover role="checkbox" tabIndex={-1} >   
+                                <TableRow key={task.id} hover role="checkbox" tabIndex={-1} onClick={() => handleClickChangeTask(task)}>   
                                     <TableCell sx={{textAlign: 'center'}} component="th" scope="row" >
                                         {task.taskId}
                                     </TableCell>
@@ -106,7 +119,7 @@ const InformationTaskCard = () => {
                                         {task.taskDescription}
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center', color: `${task.taskStatus ? 'blue' : 'red'}` }} component="th" scope="row">
-                                        {task.taskStatus ? 'Done' : 'Pending'}
+                                        {task.taskStatus ? 'Done' : 'Pendding'}
                                     </TableCell>
                                 </TableRow>
                             </>
@@ -125,8 +138,9 @@ const InformationTaskCard = () => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
+        <EditTaskDialog openDialog={openEditDialog} onCloseDialog={handleOnCloseDialog} task={task}></EditTaskDialog>
     </>
     
 }
 
-export { InformationTaskCard }
+export { EditableTasksCard }

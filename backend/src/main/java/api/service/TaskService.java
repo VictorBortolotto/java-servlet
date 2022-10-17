@@ -76,7 +76,7 @@ public class TaskService implements TaskRepository {
 			}
 			
 			if (task.getId() == 0) {
-				return new TaskResponse(404, "There's no task to retrive!");
+				return new TaskResponse(404, "There's no task to retrieve!");
 			}
 		}
 		
@@ -115,7 +115,7 @@ public class TaskService implements TaskRepository {
 			}
 			
 			if (taskList == null || taskList.size() == 0) {
-				return new TaskResponse(404, "There's no tasks to retrive!");
+				return new TaskResponse(404, "There's no tasks to retrieve!");
 			}
 		}
 		
@@ -155,7 +155,7 @@ public class TaskService implements TaskRepository {
 			}
 			
 			if (taskList == null || taskList.size() == 0) {
-				return new TaskResponse(404, "There's no tasks to retrive!");
+				return new TaskResponse(404, "There's no tasks to retrieve!");
 			}
 		}
 		
