@@ -116,16 +116,19 @@ public class TaskController extends HttpServlet {
 		
 		TaskResponse serverResponse = null;
 		
-		if(url.equals("servlet-api/servlet/api/update-to-done")) {
+		if(url.equals("servlet-api/servlet/api/tasks-by-status")) {
 			String idText = request.getParameter("id");
 			long id = Long.parseLong(idText);
-			serverResponse = taskService.updateTaskToDone(id);
-		}
-		
-		if(url.equals("servlet-api/servlet/api/update-to-pending")) {
-			String idText = request.getParameter("id");
-			long id = Long.parseLong(idText);
-			serverResponse = taskService.updateTaskToPendding(id);
+			
+			JsonObject requestBody = ServletUtils.getBodyAsJson(request);
+			JsonElement taskStatusAsJson = requestBody.get("status");
+			
+			boolean taskStatus = Boolean.parseBoolean(taskStatusAsJson.getAsString());
+			
+			Task task = new Task();
+			task.setStatus(taskStatus);
+			
+			serverResponse = taskService.updateTaskStatus(id, task);
 		}
 		
 		if(url.equals("servlet-api/servlet/api/update-task-name")) {
@@ -163,6 +166,7 @@ public class TaskController extends HttpServlet {
 		TaskService taskService = new TaskService();
 		response.setContentType(request.getContentType());
 		PrintWriter writer = response.getWriter();
+		ServletUtils.initialServletGetConfiguration(response, request);
 		
 		String idText = request.getParameter("id");
 		long id = Long.parseLong(idText);

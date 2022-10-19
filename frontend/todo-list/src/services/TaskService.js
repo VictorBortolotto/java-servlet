@@ -94,7 +94,7 @@ export function updateTaskDescription(id, task){
 
 }
 
-export function updateToDone(id){
+export function updateStatus(id, task){
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -104,26 +104,27 @@ export function updateToDone(id){
         method: httpMethods.patch,
         headers: headers,
         mode: 'cors',
-        cache: 'default'
+        cache: 'default',
+        body: JSON.stringify(task)
     };
 
-    return fetch(DEFAULT_URL + `servlet/api/update-to-done?id=${id}`, request).then(response => response.json())
+    return fetch(DEFAULT_URL + `servlet/api/tasks-by-status?id=${id}`, request).then(response => response.json())
 
 }
 
-export function updateToPending(id){
+export function deleteTask(id){
 
     const headers = new Headers({
         "Content-Type": "application/json"
     })
 
     const request = {
-        method: httpMethods.patch,
+        method: httpMethods.delete,
         headers: headers,
         mode: 'cors',
         cache: 'default'
     };
 
-    return fetch(DEFAULT_URL + `servlet/api/update-to-done?id=${id}`, request).then(response => response.json())
+    return fetch(DEFAULT_URL + `servlet/api/delete-task?id=${id}`, request).then(response => response.json())
 
 }

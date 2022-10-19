@@ -1,5 +1,4 @@
-import { Box, Button, Icon, List, ListItem, ListItemIcon } from '@mui/material';
-import React, { useState } from 'react';
+import { Icon, List, ListItem, ListItemIcon } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import DoneIcon from '@mui/icons-material/Done';

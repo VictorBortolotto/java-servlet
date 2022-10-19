@@ -228,49 +228,17 @@ public class TaskService implements TaskRepository {
 		return new TaskResponse(200, "Task description updated with success!"); 
 	}
 
-	public TaskResponse updateTaskToPendding(long id) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		long affectedRows = 0;
-		ResultSet resultSet = null;
-		Task task = null;
-		
-		try {
-			connection = Database.getConnection();
-			preparedStatement = connection.prepareStatement("update tasks set status = false where id = ?");
-			preparedStatement.setLong(1, id);
-		
-			affectedRows = preparedStatement.executeUpdate();
-			
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-			isPreparedStatementError = true;
-		}finally {
-			isCloseConnectionError = Database.closeConnection(connection);
-			isClosePreparedStatementError = Database.closePreparedStatement(preparedStatement);
-			
-			if(isPreparedStatementError || isCloseConnectionError || isClosePreparedStatementError) {
-				return new TaskResponse(500, "Database error");
-			}
-			
-			if (affectedRows == 0) {
-				return new TaskResponse(404, "Oops, something goes wrong, we not found this task!");
-			}
- 
-		}
-		
-		return new TaskResponse(200, "Task status updated with success!", task); 
-	}
 	
-	public TaskResponse updateTaskToDone(long id) {
+	public TaskResponse updateTaskStatus(long id, Task task) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		long affectedRows = 0;
 		
 		try {
 			connection = Database.getConnection();
-			preparedStatement = connection.prepareStatement("update tasks set status = true where id = ?");
-			preparedStatement.setLong(1, id);
+			preparedStatement = connection.prepareStatement("update tasks set status = ? where id = ?");
+			preparedStatement.setBoolean(1, task.isStatus());
+			preparedStatement.setLong(2, id);
 		
 			affectedRows = preparedStatement.executeUpdate();
 			

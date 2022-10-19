@@ -19,22 +19,22 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { Box } from '@mui/system';
 
-import { updateTaskDescription, updateTaskName, updateToDone, updateToPending } from '../../services/TaskService';
+import { updateTaskDescription, updateTaskName, updateStatus, deleteTask } from '../../services/TaskService';
 
 const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [ message, setMessage] = useState('')
     const [ messageType,  setMessageType] = useState('')
-    const [reponseTaskName, setResponseTaskName] = useState({})
-    const [reponseTaskDescription, setResponseTaskDescription] = useState({})
-    const [reponseTaskDone, setResponseTaskDone] = useState({})
-    const [reponseTaskPending, setResponseTaskPendding] = useState({})
+    const [responseTaskName, setResponseTaskName] = useState({})
+    const [responseTaskDescription, setResponseTaskDescription] = useState({})
+    const [responseTaskStatus, setResponseTaskStatus] = useState({})
+    const [responseTaskDelete, setResponseTaskDelete] = useState({})
     
     const newTask = {
         id: 0,
         name: '',
         description: '',
-        status: false
+        status: task.taskStatus
     }
 
     const Alert = React.forwardRef(function Alert(props, ref) {
@@ -46,10 +46,12 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
     };
 
     const onChange = (target) => {
-        if (target.checked) {
-            newTask.status = true
-        } else {
+        if (target.checked == true && task.taskStatus == true) {
             newTask.status = false
+        } 
+        
+        if (target.checked == true && task.taskStatus == false) {
+            newTask.status = true
         }
     }
 
@@ -65,47 +67,41 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
         if(nameValue !== task.taskName && newTask.status !== task.taskStatus){
             const responseTaskName = await updateTaskName(task.taskId, newTask)
             setResponseTaskName(responseTaskName.jsonObject)
-            if(newTask.status){
-                const responseTaskDone = await updateToDone(task.taskId)
-                setResponseTaskDone(responseTaskDone.jsonObject)
-            }else{
-                const responseTaskPending = await updateToPending(task.taskId)
-                setResponseTaskPendding(responseTaskPending.jsonObject)
-            }
+            const responseTaskStatus = await updateStatus(task.taskId, newTask)
+            setResponseTaskStatus(responseTaskStatus.jsonObject)
         }
 
         if(descriptionValue !== task.taskDescription && newTask.status !== task.taskStatus){
             const responseTaskDescription = await updateTaskDescription(task.taskId, newTask)
             setResponseTaskDescription(responseTaskDescription.jsonObject)
-            if(newTask.status){
-                const responseTaskDone = await updateToDone(task.taskId)
-                setResponseTaskDone(responseTaskDone.jsonObject)
-            }else{
-                const responseTaskPending = await updateToPending(task.taskId)
-                setResponseTaskPendding(responseTaskPending.jsonObject)
-            }
+            const responseTaskStatus = await updateStatus(task.taskId, newTask)
+            setResponseTaskStatus(responseTaskStatus.jsonObject)
         }
 
-        if(nameValue !== task.updateTaskName){
+        if(nameValue !== task.taskName && responseTaskName == {}){
             const responseTaskName = await updateTaskName(task.taskId, newTask)
             setResponseTaskName(responseTaskName.jsonObject)
         }
 
-        if(descriptionValue !== task.taskDescription){
+        if(descriptionValue !== task.taskDescription && responseTaskDescription == {}){
             const responseTaskDescription = await updateTaskDescription(task.taskId, newTask)
             setResponseTaskDescription(responseTaskDescription.jsonObject)
         }
 
         if(newTask.status !== task.taskStatus){
-            if(newTask.status){
-                const responseTaskDone = await updateToDone(task.taskId)
-                setResponseTaskDone(responseTaskDone.jsonObject)
-            }else{
-                const responseTaskPending = await updateToPending(task.taskId)
-                setResponseTaskPendding(responseTaskPending.jsonObject)
-            }
+            const responseTaskStatus = await updateStatus(task.taskId, newTask)
+            setResponseTaskStatus(responseTaskStatus.jsonObject)
         }
 
+    }
+
+    async function deleteTaskById(){
+       const responseTaskDelete = await deleteTask(task.taskId)
+       setResponseTaskDelete(responseTaskDelete)
+    }
+
+    const handleClickDelete = () => {
+        deleteTaskById();
     }
 
     const handleSubmitChanges = () => {
@@ -156,7 +152,7 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
                                 sx={{width: '100%'}}
                             />
                             <FormGroup sx={{display: 'flex', justifyContent: 'start', width: '90%'}}>
-                                <FormControlLabel labelPlacement='start' control={<Checkbox id='checkboxStatus' onChange={({target}) => onChange(target)} />} label="Task Status" sx={{margin: '0px'}} />
+                                <FormControlLabel labelPlacement='start' control={<Checkbox id='checkboxStatus' onChange={({target}) => onChange(target)} />} label={task.taskStatus ? "To pending" : "To done"} sx={{margin: '0px'}} />
                             </FormGroup>
                         </Box>
                     </FormControl>
@@ -166,7 +162,7 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
                         <Button variant="contained" color="success" sx={{height: '50px', width: '150px'}} onClick={handleSubmitChanges}>
                             Submit
                         </Button>
-                        <Button variant="contained" color="error" sx={{height: '50px', width: '150px'}} onClick={onCloseDialog}>
+                        <Button variant="contained" color="error" sx={{height: '50px', width: '150px'}} onClick={handleClickDelete}>
                             Delete
                         </Button>
                     </Stack>
