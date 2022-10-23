@@ -262,6 +262,40 @@ public class TaskService implements TaskRepository {
 		return new TaskResponse(200, "Task status updated with success!"); 
 	}
 	
+	public TaskResponse updateTask(long id, Task task) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		long affectedRows = 0;
+
+		try {
+			connection = Database.getConnection();
+			preparedStatement = connection.prepareStatement("update tasks set name = ?, description = ?, status = ? where id = ?");
+			preparedStatement.setString(1, task.getName());
+			preparedStatement.setString(2, task.getDescription());
+			preparedStatement.setBoolean(3, task.isStatus());
+			preparedStatement.setLong(4, id);
+			
+			affectedRows = preparedStatement.executeUpdate();
+			
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			isPreparedStatementError = true;
+		}finally {
+			isCloseConnectionError = Database.closeConnection(connection);
+			isClosePreparedStatementError = Database.closePreparedStatement(preparedStatement);
+			
+			if(isPreparedStatementError || isCloseConnectionError || isClosePreparedStatementError) {
+				return new TaskResponse(500, "Database error");
+			}
+			
+			if (affectedRows == 0) {
+				return new TaskResponse(404, "Oops, something goes wrong, we not found this task!");
+			}
+		}
+		
+		return new TaskResponse(200, "Task updated with success!");
+	}
+	
 	public TaskResponse delete(long id) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;

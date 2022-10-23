@@ -116,7 +116,7 @@ public class TaskController extends HttpServlet {
 		
 		TaskResponse serverResponse = null;
 		
-		if(url.equals("servlet-api/servlet/api/tasks-by-status")) {
+		if(url.equals("servlet-api/servlet/api/update-task-status")) {
 			String idText = request.getParameter("id");
 			long id = Long.parseLong(idText);
 			
@@ -156,9 +156,31 @@ public class TaskController extends HttpServlet {
 	}
 	
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(req, resp);
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		TaskService taskService = new TaskService();
+		PrintWriter printWriter = response.getWriter();
+		response.setContentType(request.getContentType());
+		response.setCharacterEncoding("UTF-8");
+		ServletUtils.initialServletGetConfiguration(response, request);
+		
+		JsonObject requestBody = ServletUtils.getBodyAsJson(request);
+		String idText = request.getParameter("id");
+		long id = Long.parseLong(idText);
+		JsonElement taskDescriptionAsJson = requestBody.get("description");
+		JsonElement taskNameAsJson = requestBody.get("name");
+		JsonElement taskStatusAsJson = requestBody.get("status");
+		
+		String taskDescription = taskDescriptionAsJson.getAsString();
+		String taskName = taskNameAsJson.getAsString();
+		boolean taskStatus = Boolean.parseBoolean(taskStatusAsJson.getAsString());
+		
+		Task task = new Task(taskName, taskDescription, taskStatus);
+		TaskResponse serverResponse = taskService.updateTask(id, task); 
+		
+		TaskJsonResponse taskJsonResponse = TaskUtils.convertApiResponseToJson(serverResponse);
+		String prettyResponse = ServletUtils.gsonBuilder().toJson(taskJsonResponse);
+		
+		printWriter.print(prettyResponse);
 	}
 
 	@Override

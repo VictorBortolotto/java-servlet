@@ -45,6 +45,7 @@ const NewTaskDialog = ({openDialog, onCloseDialog}) =>  {
             setOpenSnackBar(true)
             setMessage(response.jsonObject.message)
             setMessageType("error")
+            onCloseDialog()
             return
         }
 
@@ -54,10 +55,12 @@ const NewTaskDialog = ({openDialog, onCloseDialog}) =>  {
             setMessageType("success")
             onCloseDialog()
         }
+
     }  
 
     const handleCloseSnackBar = (event, reason) => {
         setOpenSnackBar(false);
+        window.location.reload(false);
     };
 
     const onChange = (target) => {
@@ -126,7 +129,7 @@ const NewTaskDialog = ({openDialog, onCloseDialog}) =>  {
                 </CardActions>
             </Card>
         </Dialog>
-        <Snackbar open={openSnackBar} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+        <Snackbar open={openSnackBar} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={350} onClose={handleCloseSnackBar}>
             <Alert severity={messageType} sx={{ width: '100%' }}>
                 {message}
             </Alert>

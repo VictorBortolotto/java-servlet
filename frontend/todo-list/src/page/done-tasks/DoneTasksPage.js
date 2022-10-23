@@ -1,5 +1,7 @@
 import React from 'react';
-import { TaskEditablePanel } from '../../commons/panel/task-editable-panel/TaskEditablePanel';
+import { EditableTasksCard } from '../../commons/cards/EditableTasksCard';
+import { HeaderCard } from '../../commons/cards/HeaderCard';
+import { AddtaskFab } from '../../commons/fab/AddTaskFab';
 
 import { SideBarMenu } from '../../commons/side-bar/SideBarMenu';
 import './DoneTasksPage.css'
@@ -8,16 +10,19 @@ import './DoneTasksPage.css'
 const DoneTasksPage = () => {
 
     return <>
-        <div className='main'>
-            <header className='header'>
-
-            </header>
-            <aside className='aside'>
+        <div className='main-done-tasks'>
+            <aside className='aside-done-tasks'>
                 <SideBarMenu></SideBarMenu>
             </aside>
-            <content className='content'>
-                <TaskEditablePanel status={true}></TaskEditablePanel>
+            <header className='header-done-tasks'>
+                <HeaderCard title={'DONE'}></HeaderCard>
+            </header>
+            <content className='content-done-tasks'>
+                <EditableTasksCard taskStatus={true}></EditableTasksCard>
             </content>            
+            <footer className='footer-done-tasks'>
+                <AddtaskFab></AddtaskFab>
+            </footer>
         </div>
     </>
 

@@ -19,16 +19,12 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { Box } from '@mui/system';
 
-import { updateTaskDescription, updateTaskName, updateStatus, deleteTask } from '../../services/TaskService';
+import { updateTaskDescription, updateTaskName, updateStatus, deleteTask, updateTask } from '../../services/TaskService';
 
 const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [ message, setMessage] = useState('')
     const [ messageType,  setMessageType] = useState('')
-    const [responseTaskName, setResponseTaskName] = useState({})
-    const [responseTaskDescription, setResponseTaskDescription] = useState({})
-    const [responseTaskStatus, setResponseTaskStatus] = useState({})
-    const [responseTaskDelete, setResponseTaskDelete] = useState({})
     
     const newTask = {
         id: 0,
@@ -43,6 +39,7 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
 
     const handleCloseSnackBar = (event, reason) => {
         setOpenSnackBar(false);
+        window.location.reload(false);
     };
 
     const onChange = (target) => {
@@ -57,47 +54,113 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
 
     async function update(nameValue, descriptionValue){
 
+        if(nameValue !== task.taskName && descriptionValue !== task.taskDescription && newTask.status !== task.taskStatus){
+            const responseTask = await updateTask(task.taskId, newTask)
+            setStatusBar(responseTask.jsonObject.status_code, responseTask.jsonObject.message)
+            return
+        }
+
         if(nameValue !== task.taskName && descriptionValue !== task.taskDescription){
             const responseTaskName = await updateTaskName(task.taskId, newTask)
-            setResponseTaskName(responseTaskName.jsonObject)
             const responseTaskDescription = await updateTaskDescription(task.taskId, newTask)
-            setResponseTaskDescription(responseTaskDescription.jsonObject)
+            let statusCode = 0;
+            let message = ''
+
+            if(responseTaskName.jsonObject.status_code == 200 && responseTaskDescription.jsonObject.status_code == 200){
+                statusCode = 200;
+                message = 'Task updated with success!'
+            }
+
+            if(responseTaskName.jsonObject.status_code == 500 && responseTaskDescription.jsonObject.status_code == 500){
+                statusCode = 500;
+                message = 'Server error!'
+            }
+
+            setStatusBar(statusCode, message)
+            return;
         }
 
         if(nameValue !== task.taskName && newTask.status !== task.taskStatus){
             const responseTaskName = await updateTaskName(task.taskId, newTask)
-            setResponseTaskName(responseTaskName.jsonObject)
             const responseTaskStatus = await updateStatus(task.taskId, newTask)
-            setResponseTaskStatus(responseTaskStatus.jsonObject)
+            let statusCode = 0;
+            let message = ''
+
+            if(responseTaskName.jsonObject.status_code == 200 && responseTaskStatus.jsonObject.status_code == 200){
+                statusCode = 200;
+                message = 'Task updated with success!'
+            }
+
+            if(responseTaskName.jsonObject.status_code == 500 && responseTaskStatus.jsonObject.status_code == 500){
+                statusCode = 500;
+                message = 'Server error!'
+            }
+
+            setStatusBar(statusCode, message)
+            return;
         }
 
         if(descriptionValue !== task.taskDescription && newTask.status !== task.taskStatus){
             const responseTaskDescription = await updateTaskDescription(task.taskId, newTask)
-            setResponseTaskDescription(responseTaskDescription.jsonObject)
             const responseTaskStatus = await updateStatus(task.taskId, newTask)
-            setResponseTaskStatus(responseTaskStatus.jsonObject)
+            let statusCode = 0;
+            let message = ''
+    
+            if(responseTaskDescription.jsonObject.status_code == 200 && responseTaskStatus.jsonObject.status_code == 200){
+                statusCode = 200;
+                message = 'Task updated with success!'
+            }
+    
+            if(responseTaskDescription.jsonObject.status_code == 500 && responseTaskStatus.jsonObject.status_code == 500){
+                statusCode = 500;
+                message = 'Server error!'
+            }
+    
+            setStatusBar(statusCode, message)
+            return;
         }
 
-        if(nameValue !== task.taskName && responseTaskName == {}){
+        if(nameValue !== task.taskName){
             const responseTaskName = await updateTaskName(task.taskId, newTask)
-            setResponseTaskName(responseTaskName.jsonObject)
+            setStatusBar(responseTaskName.jsonObject.status_code, responseTaskName.jsonObject.message)
+            return;
         }
 
-        if(descriptionValue !== task.taskDescription && responseTaskDescription == {}){
+        if(descriptionValue !== task.taskDescription){
             const responseTaskDescription = await updateTaskDescription(task.taskId, newTask)
-            setResponseTaskDescription(responseTaskDescription.jsonObject)
+            setStatusBar(responseTaskDescription.jsonObject.status_code, responseTaskDescription.jsonObject.message)
+            return;
         }
 
         if(newTask.status !== task.taskStatus){
             const responseTaskStatus = await updateStatus(task.taskId, newTask)
-            setResponseTaskStatus(responseTaskStatus.jsonObject)
+            setStatusBar(responseTaskStatus.jsonObject.status_code, responseTaskStatus.jsonObject.message)
+            return;
         }
 
     }
 
     async function deleteTaskById(){
-       const responseTaskDelete = await deleteTask(task.taskId)
-       setResponseTaskDelete(responseTaskDelete)
+        const responseTaskDelete = await deleteTask(task.taskId)
+        setStatusBar(responseTaskDelete.jsonObject.status_code, responseTaskDelete.jsonObject.message)
+    }
+
+    function setStatusBar(statusCode, message){
+        setOpenSnackBar(true)
+        if(statusCode == 200){
+            setMessage(message)
+            setMessageType('success');
+        }
+
+        if(statusCode == 404){
+            setMessage(message)
+            setMessageType('warning');
+        }
+
+        if(statusCode == 500){
+            setMessage(message)
+            setMessageType('error');
+        }
     }
 
     const handleClickDelete = () => {
@@ -169,7 +232,7 @@ const EditTaskDialog = ({openDialog, onCloseDialog, task}) =>  {
                 </CardActions>
             </Card>
         </Dialog>
-        <Snackbar open={openSnackBar} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+        <Snackbar open={openSnackBar} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={350} onClose={handleCloseSnackBar}>
             <Alert severity={messageType} sx={{ width: '100%' }}>
                 {message}
             </Alert>

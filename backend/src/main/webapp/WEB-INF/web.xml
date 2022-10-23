@@ -24,7 +24,7 @@
     </init-param>
     <init-param>
       <param-name>cors.allowed.methods</param-name>
-      <param-value>GET,POST,PATCH,DELETE,HEAD,OPTIONS,PUT</param-value>
+      <param-value>GET,POST,PATCH,DELETE,PUT</param-value>
     </init-param>
   </filter>
   <filter-mapping>
@@ -38,6 +38,8 @@
     <url-pattern>/servlet/api/task</url-pattern>
     <url-pattern>/servlet/api/tasks</url-pattern>
     <url-pattern>/servlet/api/tasks-by-status</url-pattern>
+    <url-pattern>/servlet/api/update-task-status</url-pattern>
+    <url-pattern>/servlet/api/update-task</url-pattern>
     <url-pattern>/servlet/api/update-task-name</url-pattern>
     <url-pattern>/servlet/api/update-task-description</url-pattern>
     <url-pattern>/servlet/api/delete-task</url-pattern>

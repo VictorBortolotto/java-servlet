@@ -94,6 +94,24 @@ export function updateTaskDescription(id, task){
 
 }
 
+export function updateTask(id, task){
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const request = {
+        method: httpMethods.put,
+        headers: headers,
+        mode: 'cors',
+        cache: 'default',
+        body: JSON.stringify(task)
+    };
+
+    return fetch(DEFAULT_URL + `servlet/api/update-task?id=${id}`, request).then(response => response.json())
+
+}
+
 export function updateStatus(id, task){
 
     const headers = new Headers({
@@ -108,7 +126,7 @@ export function updateStatus(id, task){
         body: JSON.stringify(task)
     };
 
-    return fetch(DEFAULT_URL + `servlet/api/tasks-by-status?id=${id}`, request).then(response => response.json())
+    return fetch(DEFAULT_URL + `servlet/api/update-task-status?id=${id}`, request).then(response => response.json())
 
 }
 

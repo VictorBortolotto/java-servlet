@@ -92,7 +92,7 @@ const EditableTasksCard = ({taskStatus}) => {
         <Paper sx={{
             height: '100%',
             width: '100%',
-            border: 'solid black 1px',
+            boxShadow: '0 0 1.0px black',
             borderRadius: '10px'
         }}>
             <TableContainer sx={{height: '100%',maxHeight: '100%', borderRadius: '10px'}}>
@@ -119,7 +119,7 @@ const EditableTasksCard = ({taskStatus}) => {
                                         {task.taskDescription}
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center', color: `${task.taskStatus ? 'blue' : 'red'}` }} component="th" scope="row">
-                                        {task.taskStatus ? 'Done' : 'Pendding'}
+                                        {task.taskStatus ? 'Done' : 'Pending'}
                                     </TableCell>
                                 </TableRow>
                             </>

@@ -79,7 +79,7 @@ const InformationTaskCard = () => {
         <Paper sx={{
             height: '100%',
             width: '100%',
-            border: 'solid black 1px',
+            boxShadow: '0 0 1.0px black',
             borderRadius: '10px'
         }}>
             <TableContainer sx={{height: '100%',maxHeight: '100%', borderRadius: '10px'}}>

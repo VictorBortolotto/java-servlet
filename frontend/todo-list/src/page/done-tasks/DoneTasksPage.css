@@ -1,11 +1,30 @@
-.main {
-    display: flex;
-    flex-direction: row;
+.main-done-tasks {
+    display: grid;
+    grid-template-areas: 'aside header'
+    'aside content'
+    'aside footer';
+    grid-template-rows: 10% 75% 15%;
+    grid-template-columns: 10% 90%;
     height: 100vh;
+    width: 100%;
 }
 
-.content {
-    display: flex;
-    margin: 10px;
+.aside-done-tasks {
     width: 100%;
+    grid-area: aside;
+}
+
+.header-done-tasks {
+    grid-area: header;
+    margin: 5px
+}
+
+.content-done-tasks {
+    margin: 5px;
+    grid-area: content;   
+}
+
+.footer-done-tasks {
+    width: 100%;
+    grid-area: footer;
 }

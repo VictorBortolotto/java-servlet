@@ -13,4 +13,6 @@ public interface TaskRepository {
 	
 	TaskResponse delete(long id);
 	
+	TaskResponse updateTask(long id, Task task);
+	
 }

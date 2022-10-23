@@ -1,5 +1,7 @@
 import React from 'react';
-import { MainPanel } from '../../commons/panel/main-panel/MainPanel';
+import { HeaderCard } from '../../commons/cards/HeaderCard';
+import { InformationTaskCard } from '../../commons/cards/InformationTaskCard';
+import { AddtaskFab } from '../../commons/fab/AddTaskFab';
 
 import { SideBarMenu } from '../../commons/side-bar/SideBarMenu';
 import './Main.css'
@@ -9,15 +11,18 @@ const Main = () => {
 
     return <>
         <div className='main'>
-            <header className='header'>
-
-            </header>
             <aside className='aside'>
                 <SideBarMenu></SideBarMenu>
             </aside>
+            <header className='header'>
+                <HeaderCard title={'WELCOME'}></HeaderCard>
+            </header>
             <content className='content'>
-                <MainPanel></MainPanel>
+                <InformationTaskCard></InformationTaskCard>
             </content>            
+            <footer className='footer'>
+                <AddtaskFab></AddtaskFab>
+            </footer>
         </div>
     </>
 

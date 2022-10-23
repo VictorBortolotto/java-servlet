@@ -1,11 +1,31 @@
-.main {
-    display: flex;
-    flex-direction: row;
+.main-pendding-tasks {
+    display: grid;
+    grid-template-areas: 'aside header'
+    'aside content'
+    'aside footer';
+    grid-template-rows: 10% 75% 15%;
+    grid-template-columns: 10% 90%;
     height: 100vh;
-}
-
-.content {
-    display: flex;
-    margin: 10px;
     width: 100%;
 }
+
+.aside-pendding-tasks {
+    width: 100%;
+    grid-area: aside;
+}
+
+.header-pendding-tasks {
+    grid-area: header;
+    margin: 5px;
+}
+
+.content-pendding-tasks {
+    margin: 5px;
+    grid-area: content;   
+}
+
+.footer-pendding-tasks {
+    width: 100%;
+    grid-area: footer;
+}
+
